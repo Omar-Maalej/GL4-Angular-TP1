@@ -1,18 +1,104 @@
-<div class="row">
-  <div class="col">
-    <ol class="list-group">
-      @for (todo of todos; track todo) {
+<div class="col">
+  name:
+  <input
+    appArcEnCiel
+    [(ngModel)]="todo.name"
+    type="text"
+    class="form-control"
+  />
+  content:
+  <input [(ngModel)]="todo.content" type="text" class="form-control" />
+  <button
+    (click)="addTodo()"
+    [disabled]="!todo.name.trim() || !todo.content.trim()"
+    class="btn btn-primary m-2"
+  >
+    add
+  </button>
+</div>
+
+<div class="row g-3 mt-3">
+  <div class="col-md-4">
+    <div class="card text-bg-primary mb-3">
+      <h3>Waiting Todos</h3>
+      <ol class="list-group">
+        @for (todo of getWaitingTodos(); track todo.id) {
         <li class="list-group-item">
-          {{todo.name}} : {{todo.content}}
-          <i (click)="deleteTodo(todo)" class="fa fa-trash" aria-hidden="true"></i>
+          {{ todo.name }} : {{ todo.content }}
+          <i
+            (click)="deleteTodo(todo)"
+            class="fa fa-trash"
+            aria-hidden="true"
+          ></i>
+          <i
+            (click)="changeStatus(todo, 'in progress')"
+            class="fa fa-spinner"
+            aria-hidden="true"
+          ></i>
+          <i
+            (click)="changeStatus(todo, 'done')"
+            class="fa fa-check-square"
+            aria-hidden="true"
+          ></i>
         </li>
-      }
-    </ol>
+        }
+      </ol>
+    </div>
   </div>
-  <div appArcEnCiel class="col">
-    name: <input appArcEnCiel [(ngModel)]="todo.name" type="text" class="form-control">
-    content: <input [(ngModel)]="todo.content" type="text" class="form-control">
-    <button (click)="addTodo()" [disabled]="!todo.name.trim() || !todo.content.trim()"
-    class="btn btn-primary m-2">add</button>
+
+  <div class="col-md-4">
+    <div class="card text-bg-warning mb-3">
+      <h3>In Progess Todos</h3>
+      <ol class="list-group">
+        @for (todo of getInProgressTodos(); track todo) {
+        <li class="list-group-item">
+          {{ todo.name }} : {{ todo.content }}
+          <i
+            (click)="deleteTodo(todo)"
+            class="fa fa-trash"
+            aria-hidden="true"
+          ></i>
+          <i
+            (click)="changeStatus(todo, 'waiting')"
+            class="fa fa-pause"
+            aria-hidden="true"
+          ></i>
+          <i
+            (click)="changeStatus(todo, 'done')"
+            class="fa fa-check-square"
+            aria-hidden="true"
+          ></i>
+        </li>
+        }
+      </ol>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card text-bg-success mb-3">
+      <h3>Done Todos</h3>
+      <ol class="list-group">
+        @for (todo of getDoneTodos(); track todo) {
+        <li class="list-group-item">
+          {{ todo.name }} : {{ todo.content }}
+          <i
+            (click)="deleteTodo(todo)"
+            class="fa fa-trash"
+            aria-hidden="true"
+          ></i>
+          <i
+            (click)="changeStatus(todo, 'waiting')"
+            class="fa fa-pause"
+            aria-hidden="true"
+          ></i>
+          <i
+            (click)="changeStatus(todo, 'in progress')"
+            class="fa fa-spinner"
+            aria-hidden="true"
+          ></i>
+        </li>
+        }
+      </ol>
+    </div>
   </div>
 </div>
