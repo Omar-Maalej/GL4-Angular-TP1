@@ -24,6 +24,7 @@ export class CvCardComponent {
 
   ngOnInit() {}
   embaucher() {
+    //console.log(this.cv);
     if (this.cv) {
       if (this.embaucheService.embauche(this.cv)) {
         this.toastr.success(
