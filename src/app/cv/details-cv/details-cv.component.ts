@@ -23,19 +23,21 @@ export class DetailsCvComponent implements OnInit {
     public authService: AuthService
   ) {}
 
-  ngOnInit() {
-    this.cv$ = this.activatedRoute.params.pipe(
-      switchMap(params => {
-        const id = +params['id'];
-        return this.cvService.getCvById(id);
-      }),
-    catchError((error) => {
-      this.router.navigate([APP_ROUTES.cv]);
-      return EMPTY;
-    }
-  )
-  );
-}
+  ngOnInit(): void {
+
+    this.cv$ = this.activatedRoute.data.pipe(
+      switchMap((data) => {
+        const cv = data['cv'];
+        if (cv) {
+          return of(cv); 
+        } else {
+          this.toastr.error('CV introuvable');
+          this.router.navigate([APP_ROUTES.cv]);
+          return EMPTY; 
+        }
+      })
+    );
+  }
   
   deleteCv(cv: Cv) {
     this.cvService.deleteCvById(cv.id).subscribe({

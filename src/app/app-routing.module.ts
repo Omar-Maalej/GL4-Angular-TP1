@@ -14,6 +14,7 @@ import { DetailsCvComponent } from "./cv/details-cv/details-cv.component";
 import { RhComponent } from "./optimizationPattern/rh/rh.component";
 import { ProductsComponent } from "./products/products.component";
 import { MasterDetailCvComponent } from "./master-detail-cv/master-detail-cv.component";
+import { CvResolver } from "./master-detail-cv/cv-resolver";
 
 const routes: Route[] = [
   { path: "login", component: LoginComponent },
@@ -27,7 +28,9 @@ const routes: Route[] = [
     path: "cv/list", 
    component: MasterDetailCvComponent, 
    children : [
-     { path : ":id", component : DetailsCvComponent }
+     { path : ":id", component : DetailsCvComponent , resolve: {
+      cv: CvResolver
+     }}
    ]
  },
   { path: "cv/:id", component: DetailsCvComponent },
