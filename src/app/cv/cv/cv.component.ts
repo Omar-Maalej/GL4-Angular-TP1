@@ -3,15 +3,15 @@ import { Cv } from "../model/cv";
 import { LoggerService } from "../../services/logger.service";
 import { ToastrService } from "ngx-toastr";
 import { CvService } from "../services/cv.service";
-import { catchError, of } from "rxjs";
+import { BehaviorSubject, catchError, combineLatest, map, of, Subject } from "rxjs";
 @Component({
   selector: "app-cv",
   templateUrl: "./cv.component.html",
   styleUrls: ["./cv.component.css"],
 })
 export class CvComponent {
-  selectedCv: Cv | null = null;
-  /*   selectedCv: Cv | null = null; */
+
+
   date = new Date();
 
   cvs$ = this.cvService.getCvs().pipe(
@@ -26,6 +26,22 @@ export class CvComponent {
 
   selectedCv$ = this.cvService.selectCv$;
 
+  private activeTab$ = new BehaviorSubject<string>("juniors");
+
+  //private activeTab$ = new Subject<string>(); we need intial value
+
+
+  activeTab = "juniors";
+ 
+  filteredCvs$ = combineLatest([this.cvs$, this.activeTab$]).pipe(
+    map(([cvs, activeTab]) => {
+      return activeTab === "juniors"
+        ? cvs.filter((cv) => cv.age < 40)
+        : cvs.filter((cv) => cv.age >= 40);
+    })
+  );
+  
+
   constructor(
     private logger: LoggerService,
     private toastr: ToastrService,
@@ -37,5 +53,10 @@ export class CvComponent {
 
   selectCv(cv: Cv) {
     this.cvService.selectCv(cv);
+  }
+
+  setTab(tab: string) {
+    this.activeTab = tab;
+    this.activeTab$.next(tab);
   }
 }

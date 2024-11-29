@@ -1,12 +1,29 @@
 <div class="row">
   <div class="col">
     <div class="alert alert-warning">
-      {{ date | date : "full" | uppercase }}
+      {{ date | date: "full" | uppercase }}
     </div>
-    <app-list [cvs]="cvs$ | async"></app-list>
+
+
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a class="nav-link" [class.active]="activeTab === 'juniors'" (click)="setTab('juniors')">
+          Juniors
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [class.active]="activeTab === 'seniors'" (click)="setTab('seniors')">
+          Seniors
+        </a>
+      </li>
+    </ul>
+
+    <app-list [cvs]="filteredCvs$ | async"></app-list>
   </div>
+
   <div class="col">
     <app-cv-card [cv]="selectedCv$ | async"></app-cv-card>
   </div>
 </div>
+
 <app-embauche></app-embauche>
