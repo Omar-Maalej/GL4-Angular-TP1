@@ -1,43 +1,35 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Route } from "@angular/router";
-import { TodoComponent } from "./todo/todo/todo.component";
-import { MiniWordComponent } from "./directives/mini-word/mini-word.component";
-import { ColorComponent } from "./components/color/color.component";
 import { FrontComponent } from "./templates/front/front.component";
 import { AdminComponent } from "./templates/admin/admin.component";
-import { LoginComponent } from "./auth/login/login.component";
-import { NF404Component } from "./components/nf404/nf404.component";
 import { AuthGuard } from "./auth/guards/auth.guard";
-import { AddCvComponent } from "./cv/add-cv/add-cv.component";
-import { CvComponent } from "./cv/cv/cv.component";
-import { DetailsCvComponent } from "./cv/details-cv/details-cv.component";
-import { RhComponent } from "./optimizationPattern/rh/rh.component";
-import { TTCComponent } from "./components/ttc/ttc.component";
 
 const routes: Route[] = [
-  { path: "login", component: LoginComponent },
-  { path: "rh", component: RhComponent },
-  { path: "ttc", component: TTCComponent },
+  { path: "login", loadComponent: () => import("./auth/login/login.component").then((m) => m.LoginComponent) },
+  { path: "rh", loadComponent: () => import("./optimizationPattern/rh/rh.component").then((m) => m.RhComponent) },
+  { path: "ttc", loadComponent: () => import("./components/ttc/ttc.component").then((m) => m.TTCComponent) },
   {
     path: "cv",
-    component: CvComponent,
+    loadComponent: () => import("./cv/cv/cv.component").then((m) => m.CvComponent),
   },
-  { path: "cv/add", component: AddCvComponent, canActivate: [AuthGuard] },
-  { path: "cv/:id", component: DetailsCvComponent },
+  { path: "cv/add",
+    loadComponent: () => import("./cv/add-cv/add-cv.component").then((m) => m.AddCvComponent), 
+    canActivate: [AuthGuard] },
+  { path: "cv/:id", loadComponent: () => import("./cv/details-cv/details-cv.component").then((m) => m.DetailsCvComponent) },
   {
     path: "",
     component: FrontComponent,
     children: [
-      { path: "todo", component: TodoComponent },
-      { path: "word", component: MiniWordComponent },
+      { path: "todo", loadComponent: () => import("./todo/todo/todo.component").then((m) => m.TodoComponent) },
+      { path: "word", loadComponent: () => import("./directives/mini-word/mini-word.component").then((m) => m.MiniWordComponent) },
     ],
   },
   {
     path: "admin",
     component: AdminComponent,
-    children: [{ path: "color", component: ColorComponent }],
+    children: [{ path: "color", loadComponent: () => import("./components/color/color.component").then((m) => m.ColorComponent) }],
   },
-  { path: "**", component: NF404Component },
+  { path: "**", loadComponent: () => import("./components/nf404/nf404.component").then((m) => m.NF404Component) },
 ];
 
 @NgModule({
