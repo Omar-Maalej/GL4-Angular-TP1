@@ -52,6 +52,8 @@ import { ServiceWorkerModule } from "@angular/service-worker";
 import { AutocompleteComponent } from "./cv/autocomplete/autocomplete.component";
 import { SliderComponent } from "./rxjs/slider/slider.component";
 import { MasterDetailCvComponent } from "./master-detail-cv/master-detail-cv.component";
+import { CvModule } from "./cv/cv.module";
+import { Cv } from "./cv/model/cv";
 
 @NgModule({
   declarations: [
@@ -60,25 +62,13 @@ import { MasterDetailCvComponent } from "./master-detail-cv/master-detail-cv.com
     SecondComponent,
     ColorComponent,
     TwoComponent,
-    CardProfilComponent,
     PereComponent,
     FilsComponent,
-    AddCvComponent,
-    CvComponent,
-    ListComponent,
-    ItemComponent,
-    DetailsCvComponent,
-    CvCardComponent,
-    CardProfilComponent,
-    EmbaucheComponent,
-    DefaultImagePipe,
-    AutocompleteComponent,
     NgstyleComponent,
     MiniWordComponent,
     NgclassComponent,
     HighlightDirective,
     Btc2usdPipe,
-    TodoComponent,
     NavbarComponent,
     FrontComponent,
     AdminComponent,
@@ -91,7 +81,6 @@ import { MasterDetailCvComponent } from "./master-detail-cv/master-detail-cv.com
     RhComponent,
     UserListComponent,
     ProductsComponent,
-    MasterDetailCvComponent
   ],
   bootstrap: [AppComponent],
   imports: [
@@ -107,6 +96,7 @@ import { MasterDetailCvComponent } from "./master-detail-cv/master-detail-cv.com
       // or after 30 seconds (whichever comes first).
       registrationStrategy: "registerWhenStable:30000",
     }),
+    CvModule,
   ],
   providers: [
     AuthInterceptorProvider,

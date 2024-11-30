@@ -15,31 +15,24 @@ import { RhComponent } from "./optimizationPattern/rh/rh.component";
 import { ProductsComponent } from "./products/products.component";
 import { MasterDetailCvComponent } from "./master-detail-cv/master-detail-cv.component";
 import { CvResolver } from "./master-detail-cv/cv-resolver";
+import { CustomPreloadingStrategy } from "./CustomPreloadingStrategy";
 
 const routes: Route[] = [
-  { path: "login", component: LoginComponent },
-  { path: "rh", component: RhComponent },
   {
     path: "cv",
-    component: CvComponent,
+    loadChildren : () => import('./cv/cv.module').then(m => m.CvModule),
+    data: {preload: true}
   },
-  { path: "cv/add", component: AddCvComponent, canActivate: [AuthGuard] },
-  {
-    path: "cv/list", 
-   component: MasterDetailCvComponent, 
-   children : [
-     { path : ":id", component : DetailsCvComponent , resolve: {
-      cv: CvResolver
-     }}
-   ]
- },
-  { path: "cv/:id", component: DetailsCvComponent },
- 
+  { path: "login", component: LoginComponent },
+  { path: "rh", component: RhComponent },
   {
     path: "",
     component: FrontComponent,
     children: [
-      { path: "todo", component: TodoComponent },
+      { path: "todo", 
+        loadChildren: () => import('./todo/todo.module').then(m => m.TodoModule),
+        data: {preload: false}
+       },
       { path: "word", component: MiniWordComponent },
     ],
   },
@@ -54,7 +47,7 @@ const routes: Route[] = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {preloadingStrategy: CustomPreloadingStrategy})],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}
