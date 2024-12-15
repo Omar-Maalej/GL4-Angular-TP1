@@ -1,23 +1,7 @@
 <p>master-detail-cv works!</p>
 <div class="row">
   <div class="col">
-    <div class="alert alert-warning">
-      {{ date | date : "full" | uppercase }}
-    </div>
-    <ol class="list-group">
-      <li
-        *ngFor="let cv of cvs$ | async; let isOdd = odd"
-        [ngClass]="{
-          'list-group-item-primary': isOdd,
-          'list-group-item-secondary': !isOdd
-        }"
-        class="list-group-item"
-        (click)="goToCvDetail(cv)"
-        style="cursor: pointer"
-      >
-        <app-item [cv]="cv"></app-item>
-      </li>
-    </ol>
+    <app-list [cvs]="cvs$ | async"/>
   </div>
 <router-outlet></router-outlet>
 </div>

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { catchError, of } from 'rxjs';
 import { LoggerService } from '../services/logger.service';
 import { ToastrService } from 'ngx-toastr';
@@ -25,10 +26,6 @@ export class MasterDetailCvComponent {
       return of(this.cvService.getFakeCvs());
     })
   );
- 
-
-
-
   constructor(
     private logger: LoggerService,
     private toastr: ToastrService,
@@ -38,6 +35,12 @@ export class MasterDetailCvComponent {
   ) {
     this.logger.logger("je suis le cvComponent");
     this.toastr.info("Bienvenu dans notre CvTech");
+
+    cvService.selectCv$
+    .pipe(
+      takeUntilDestroyed()
+    )
+    .subscribe((cv) => this.goToCvDetail(cv))
   }
 
 

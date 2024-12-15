@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import {
   BehaviorSubject,
   Observable,
@@ -18,23 +18,22 @@ import { ProductApiResponse } from "./dto/product-api-response.dto";
   styleUrls: ["./products.component.css"],
 })
 export class ProductsComponent {
+  productService = inject( ProductService);
+  private loadMoreSubject = new BehaviorSubject<void>(undefined); 
   /* Todo : Faire le nécessaire pour créer le flux des produits à afficher */
   /* Tips : vous pouvez voir les différents imports non utilisés et vous en inspirer */
-  products$: Observable<Product[]>;
-  private loadMoreSubject = new BehaviorSubject<void>(undefined); 
+  products$: Observable<Product[]> = this.loadMoreSubject.pipe(
+    takeWhile(() => this.skip <= this.maxSkip), 
+    concatMap(() => this.fetchProducts()), 
+    scan((acc : Product[], products) => [...acc, ...products], []), 
+  );;
+
   private limit = 12; 
   private skip = 0; 
   private total = 0; 
   private hasMoreProducts = true; 
   private maxSkip = 108;
 
-  constructor(private productService: ProductService) {
-    this.products$ = this.loadMoreSubject.pipe(
-      takeWhile(() => this.skip <= this.maxSkip), 
-      concatMap(() => this.fetchProducts()), 
-      scan((acc : Product[], products) => [...acc, ...products], []), 
-    );
-  }
 
   private fetchProducts(): Observable<Product[]> {
     const settings: Settings = { limit: this.limit, skip: this.skip };
