@@ -20,6 +20,12 @@
   >
     Cette Cin est invalide
   </div>
+  <div *ngIf="cin.errors?.['cinNotUnique'] && cin.touched">
+    Ce CIN est déjà utilisé.
+  </div>
+  <div *ngIf="form.errors?.['invalidCinForAge'] && form.touched">
+    Le CIN est invalide pour l'âge saisi.
+  </div>
   Job: <input type="text" class="form-control" formControlName="job" /> Path:
   <input type="text" class="form-control" formControlName="path" />
 
